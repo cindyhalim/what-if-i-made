@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from income.serializers import IncomesDeltaSerializer
-from income.utils import get_net_pay_after_tax, get_percentage_increase
+from income.serializers import IncomesDeltaSerializer, IncomeRequiredSerializer
+from income.utils import get_net_pay_after_tax, get_percentage_increase, get_income_required_before_tax
 
 class IncomesDeltaView(APIView):
   serializer_class = IncomesDeltaSerializer
@@ -27,7 +27,22 @@ class IncomesDeltaView(APIView):
 
     return Response(response)
 
-    
+
+class IncomeRequiredView(APIView):
+  serializer_class = IncomeRequiredSerializer
+
+  def post(self, request):
+    serializer = IncomeRequiredSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    data = serializer.data
+
+    income_required_after_tax = int((data["savings_goal"] / data["savings_goal_rate"]) + (data["average_expenses_per_month"] * 12))
+
+    income_required_before_tax = get_income_required_before_tax(region=data["region"], income_after_tax=income_required_after_tax)
+
+    return Response(dict(income_required_before_tax=income_required_before_tax))
+
 
   
 
