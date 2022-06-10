@@ -25,15 +25,13 @@ interface IRegionTextInputProps {
 
 export const RegionTextInput: React.FC<IRegionTextInputProps> = ({ input, setInput }) => {
   const [searchResult, setSearchResult] = useState<string | null>(null)
-  const fuse = useMemo(() => new Fuse(options, { minMatchCharLength: 3, threshold: 0.0 }), [])
 
   useEffect(() => {
-    const results = fuse.search(input || "")
-    if (results.length) {
-      console.log(results)
-      setSearchResult(results[0]?.item)
+    if (input && input.length >= 3) {
+      const results = options.filter((option) => option.includes(input))
+      setSearchResult(results[0] || "")
     }
-  }, [input, fuse])
+  }, [input])
 
   useEffect(() => {
     if (input && input.length < 4) {
