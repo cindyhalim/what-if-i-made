@@ -5,6 +5,6 @@ export const theme = {
     white: "#F3F8F2",
   },
   heading: {
-    fontSize: [22, 50, 60],
+    fontSize: [22, 40, 40],
   },
-};
+}
