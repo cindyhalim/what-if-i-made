@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { Box } from "rebass"
 import { theme } from "../styles/theme"
 import { motion, useAnimation } from "framer-motion"
-import { usePrevious } from "../utils/usePrevious"
+import { usePrevious } from "../hooks/usePrevious"
 
 type InputType = "money"
 interface ITextInputProps {
@@ -29,6 +29,24 @@ export const TextInput: React.FC<ITextInputProps> = ({ name, placeholder = "", t
     const inputHeight = inputRef?.current?.clientHeight || 0
     setInputHeight(inputHeight)
   }, [])
+
+  useEffect(() => {
+    const cb = () => {
+      const width = textRef?.current?.clientWidth || 0
+      const height = inputRef?.current?.clientHeight || 0
+
+      setInputWidth(width)
+      setInputHeight(height)
+
+      controls.start({
+        width: `${width + INPUT_PADDING * 2}px`,
+        transition: { duration: 0.5 },
+      })
+    }
+    window.addEventListener("resize", cb)
+
+    return () => window.removeEventListener("resize", cb)
+  }, [setInputWidth, setInputHeight, controls])
 
   useEffect(() => {
     const width = textRef?.current?.clientWidth || 0
