@@ -1,6 +1,6 @@
 import { Input } from "@rebass/forms"
 import React, { useEffect, useRef, useState } from "react"
-import { Box } from "rebass"
+import { Box, Text } from "rebass"
 import { theme } from "../styles/theme"
 import { motion, useAnimation } from "framer-motion"
 import { usePrevious } from "../hooks/usePrevious"
@@ -10,12 +10,25 @@ interface ITextInputProps {
   name: string
   placeholder?: string
   type?: InputType | null
+  setValue: React.Dispatch<React.SetStateAction<string | null>>
+  value: string | null
+  onChange?: (text: string) => void
+  autoSuggestion?: string
+  setAutoSuggestion?: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export const TextInput: React.FC<ITextInputProps> = ({ name, placeholder = "", type = null }) => {
+export const TextInput: React.FC<ITextInputProps> = ({
+  name,
+  placeholder = "",
+  type = null,
+  setValue,
+  value,
+  onChange,
+  autoSuggestion,
+  setAutoSuggestion,
+}) => {
   const INPUT_PADDING = 5
 
-  const [value, setValue] = useState<string | null>(null)
   const [inputHeight, setInputHeight] = useState<number>(0)
   const [inputWidth, setInputWidth] = useState<number>(0)
 
@@ -38,15 +51,17 @@ export const TextInput: React.FC<ITextInputProps> = ({ name, placeholder = "", t
       setInputWidth(width)
       setInputHeight(height)
 
-      controls.start({
-        width: `${width + INPUT_PADDING * 2}px`,
-        transition: { duration: 0.5 },
-      })
+      if (value) {
+        controls.start({
+          width: `${width + INPUT_PADDING * 2}px`,
+          transition: { duration: 0.5 },
+        })
+      }
     }
     window.addEventListener("resize", cb)
 
     return () => window.removeEventListener("resize", cb)
-  }, [setInputWidth, setInputHeight, controls])
+  }, [setInputWidth, value, setInputHeight, controls])
 
   useEffect(() => {
     const width = textRef?.current?.clientWidth || 0
@@ -65,14 +80,25 @@ export const TextInput: React.FC<ITextInputProps> = ({ name, placeholder = "", t
       return formattedText ? `$${textWithThousandsSeparator}` : ""
     }
 
+    if (formattedText.length === 1) {
+      return formattedText.toUpperCase()
+    }
     return formattedText
   }
 
+  const resetAutoSuggestion = () => {
+    setAutoSuggestion && setAutoSuggestion("")
+  }
+
   const handleOnFocus = () => {
+    resetAutoSuggestion()
     controls.set({ width: "0px" })
   }
 
   const handleOnBlur = () => {
+    if (autoSuggestion) {
+      setValue(autoSuggestion)
+    }
     const width = textRef?.current?.clientWidth || 0
     controls.start({
       width: value ? `${width + INPUT_PADDING * 2}px` : "0px",
@@ -102,10 +128,12 @@ export const TextInput: React.FC<ITextInputProps> = ({ name, placeholder = "", t
         contentEditable={"true"}
         spellCheck={"false"}
         autoComplete={"off"}
+        autoCapitalize={"sentences"}
         value={value || ""}
         placeholder={placeholder}
         sx={{
           ...theme.heading,
+          zIndex: 1000,
           fontWeight: "bold",
           outline: 0,
           border: 0,
@@ -121,7 +149,11 @@ export const TextInput: React.FC<ITextInputProps> = ({ name, placeholder = "", t
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         onChange={(event) => {
+          if (!value) {
+            resetAutoSuggestion()
+          }
           const formattedText = formatInputBasedOnMask(event.target.value)
+          onChange && onChange(formattedText)
           setValue(formattedText)
         }}
       />
@@ -137,14 +169,33 @@ export const TextInput: React.FC<ITextInputProps> = ({ name, placeholder = "", t
           overflow: "auto",
         }}
       >
-        {value || placeholder}
+        {autoSuggestion || value || placeholder}
       </Box>
+      {autoSuggestion && (
+        <Input
+          value={autoSuggestion}
+          sx={{
+            ...theme.heading,
+            padding: 0,
+            fontWeight: "bold",
+            width: inputWidth,
+            display: "inline-block",
+            position: "absolute",
+            outline: 0,
+            border: 0,
+            opacity: 0.5,
+            top: 0,
+            left: 0,
+          }}
+          onChange={() => null}
+        />
+      )}
       <motion.div
         animate={controls}
         style={{
           backgroundColor: theme.colors.white,
           borderRadius: 10,
-          opacity: 0.2,
+          opacity: 0.3,
           position: "absolute",
           top: `-${INPUT_PADDING}px`,
           left: `-${INPUT_PADDING}px`,
