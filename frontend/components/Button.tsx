@@ -1,29 +1,20 @@
-import React from "react";
-import { Button as RButton, Text } from "rebass";
-import { theme } from "../styles/theme";
-
-export enum ButtonType {
-  PRIMARY = "PRIMARY",
-  SECONDARY = "SECONDARY",
-}
+import React from "react"
+import { Button as RButton, Text } from "rebass"
+import { Theme, themeColors } from "../styles/theme"
 
 interface IButtonProps {
-  children: React.ReactNode;
-  type?: ButtonType;
-  onClick: () => void;
+  children: React.ReactNode
+  theme?: Theme
+  onClick: () => void
 }
-export const Button: React.FC<IButtonProps> = ({
-  children,
-  type = ButtonType.PRIMARY,
-  onClick,
-}) => {
+export const Button: React.FC<IButtonProps> = ({ children, theme = Theme.PRIMARY, onClick }) => {
   return (
     <RButton
       sx={{
         width: ["120px", "200px"],
         height: ["35px", "50px"],
-        color: theme.colors.green,
-        backgroundColor: theme.colors.white,
+        color: themeColors[theme].button.text,
+        backgroundColor: themeColors[theme].button.bg,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -38,5 +29,5 @@ export const Button: React.FC<IButtonProps> = ({
         {children}
       </Text>
     </RButton>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
+import { Theme } from "../styles/theme"
 import { TextInput } from "./TextInput"
-import Fuse from "fuse.js"
 
 const options = [
   "Alberta",
@@ -19,11 +19,16 @@ const options = [
 ]
 
 interface IRegionTextInputProps {
+  theme?: Theme
   input: string | null
   setInput: React.Dispatch<React.SetStateAction<string | null>>
 }
 
-export const RegionTextInput: React.FC<IRegionTextInputProps> = ({ input, setInput }) => {
+export const RegionTextInput: React.FC<IRegionTextInputProps> = ({
+  input,
+  setInput,
+  theme = Theme.PRIMARY,
+}) => {
   const [searchResult, setSearchResult] = useState<string | null>(null)
 
   useEffect(() => {
@@ -31,27 +36,21 @@ export const RegionTextInput: React.FC<IRegionTextInputProps> = ({ input, setInp
       const results = options.filter((option) => option.includes(input))
       setSearchResult(results[0] || "")
     }
-  }, [input])
 
-  useEffect(() => {
     if (input && input.length < 4) {
       setSearchResult("")
     }
   }, [input])
 
   return (
-    <>
-      <TextInput
-        name="region"
-        placeholder="province/territory"
-        value={input}
-        autoSuggestion={searchResult || ""}
-        setAutoSuggestion={setSearchResult}
-        setValue={setInput}
-        onChange={(text: string) => {
-          setInput(text)
-        }}
-      />
-    </>
+    <TextInput
+      theme={theme}
+      name="region"
+      placeholder="province/territory"
+      value={input}
+      autoSuggestion={searchResult || ""}
+      setAutoSuggestion={setSearchResult}
+      setValue={setInput}
+    />
   )
 }
