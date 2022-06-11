@@ -12,11 +12,12 @@
     "@emotion/react": "^11.9.0",
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
+    "axios": "^0.27.2",
     "framer-motion": "^6.3.11",
-    "fuse.js": "^6.6.2",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
+    "react-query": "^3.39.1",
     "rebass": "^4.0.7"
   },
   "devDependencies": {
