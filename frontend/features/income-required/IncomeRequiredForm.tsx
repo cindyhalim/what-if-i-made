@@ -1,8 +1,10 @@
 import React, { useState } from "react"
+import { useMutation } from "react-query"
 import { Flex, Text } from "rebass"
 import { BaseForm } from "../../components/BaseForm"
-import { RegionTextInput } from "../../components/RegionTextInput"
+import { canadianRegions, RegionTextInput } from "../../components/RegionTextInput"
 import { TextInput } from "../../components/TextInput"
+import { incomeRequiredMutationFn } from "../../core/mutations"
 import { theme, Theme } from "../../styles/theme"
 
 export const IncomeRequiredForm: React.FC = () => {
@@ -10,6 +12,7 @@ export const IncomeRequiredForm: React.FC = () => {
   const [spending, setSpending] = useState<string | null>(null)
   const [goal, setGoal] = useState<string | null>(null)
   const [duration, setDuration] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const incomeRequiredPrompts = [
     <>
@@ -36,7 +39,7 @@ export const IncomeRequiredForm: React.FC = () => {
     </>,
     <>
       <Text as={"h2"} sx={{ ...theme.heading }}>
-        i want to save
+        if i want to save
       </Text>
       <TextInput
         theme={Theme.SECONDARY}
@@ -63,12 +66,50 @@ export const IncomeRequiredForm: React.FC = () => {
     </>,
   ]
 
+  const { isLoading, mutate } = useMutation("mutateIncomeRequired", incomeRequiredMutationFn, {
+    onError: () => setErrorMessage("Something went wrong. Please try again."),
+  })
+
+  const validate = () => {
+    if (!region || !spending || !goal || !duration) {
+      setErrorMessage("Missing required fields")
+      return false
+    }
+
+    if (parseInt(duration) < 1) {
+      setErrorMessage("Saving goal should at least be 1 year")
+      return false
+    }
+
+    if (region && !canadianRegions.includes(region)) {
+      setErrorMessage("Not a valid Canadian province/territory")
+      return false
+    }
+
+    return true
+  }
+
+  const handleOnSubmit = () => {
+    const isValid = validate()
+
+    if (isValid) {
+      mutate({
+        region: region || "",
+        expensesPerMonth: spending || "",
+        goal: goal || "",
+        duration: duration || "",
+      })
+    }
+  }
   return (
     <BaseForm
       theme={Theme.SECONDARY}
       button={{
-        onSubmit: () => null,
+        onSubmit: handleOnSubmit,
+        isDisabled: isLoading,
+        isLoading,
       }}
+      errorMessage={errorMessage}
     >
       {incomeRequiredPrompts.map((prompt, idx) => (
         <Flex key={idx} sx={{ flexWrap: "wrap", alignItems: "center", marginBottom: 20 }}>
@@ -76,7 +117,7 @@ export const IncomeRequiredForm: React.FC = () => {
         </Flex>
       ))}
       <Text as={"h2"} sx={{ ...theme.heading }}>
-        how much should i be making?
+        how much should i make?
       </Text>
     </BaseForm>
   )

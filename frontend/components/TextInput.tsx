@@ -167,7 +167,6 @@ export const TextInput: React.FC<ITextInputProps> = ({
           },
         }}
         onKeyDown={(event) => {
-          console.log("hii event", event)
           if (autoSuggestion && event.code === "Enter") {
             setValue(autoSuggestion)
             event.currentTarget.blur()

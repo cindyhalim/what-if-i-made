@@ -9,9 +9,17 @@ interface IBaseFormProps {
   children: React.ReactNode
   button: {
     onSubmit: () => void
+    isDisabled: boolean
+    isLoading: boolean
   }
+  errorMessage: string | null
 }
-export const BaseForm: React.FC<IBaseFormProps> = ({ theme = Theme.PRIMARY, button, children }) => (
+export const BaseForm: React.FC<IBaseFormProps> = ({
+  theme = Theme.PRIMARY,
+  button,
+  children,
+  errorMessage,
+}) => (
   <Flex
     sx={{
       width: "100%",
@@ -22,9 +30,11 @@ export const BaseForm: React.FC<IBaseFormProps> = ({ theme = Theme.PRIMARY, butt
       maxWidth: "1500px",
     }}
   >
-    <ErrorToast message={"Something went wrong. Please try again."} />
+    {errorMessage && <ErrorToast message={errorMessage || ""} />}
     {children}
     <Button
+      isLoading={button.isLoading}
+      isDisabled={button.isDisabled}
       theme={theme}
       onClick={button.onSubmit}
       sx={{ marginTop: [30, 50, 50], alignSelf: "center" }}

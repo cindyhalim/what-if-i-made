@@ -8,6 +8,7 @@ import { IncomeDeltaForm } from "../features/income-delta/IncomeDeltaForm"
 import { IncomeRequiredForm } from "../features/income-required/IncomeRequiredForm"
 import { motion, useAnimation } from "framer-motion"
 import { BaseLayout } from "../components/BaseLayout"
+import { Loading } from "../components/Loading"
 
 type Form = "income-delta" | "income-required"
 

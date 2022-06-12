@@ -18,7 +18,7 @@ const regionToCodeMap: { [key: string]: string } = {
   Yukon: "YT",
 }
 
-interface IIncomeDeltaQueryPayload {
+interface IIncomeDeltaMutationPayload {
   currentIncome: string
   desiredIncome: string
   region: string
@@ -34,7 +34,8 @@ const formatCurrencyToInt = (currency: string) => {
   const formattedCurrency = currency.replace(/[^0-9]/g, "")
   return parseInt(formattedCurrency)
 }
-export const incomeDeltaQueryFn = async (payload: IIncomeDeltaQueryPayload) => {
+
+export const incomeDeltaMutationFn = async (payload: IIncomeDeltaMutationPayload) => {
   const regionCode = regionToCodeMap[payload.region]
 
   const response = await axios.post<IIncomeDeltaRawResponse>(`${baseUrl}/delta`, {
@@ -49,5 +50,32 @@ export const incomeDeltaQueryFn = async (payload: IIncomeDeltaQueryPayload) => {
     percentageIncrease: response.data.percentage_increase,
     currentIncomeAfterTax: response.data.current_income_after_tax,
     desiredIncomeAfterTax: response.data.desired_income_after_tax,
+  }
+}
+
+interface IIncomeRequiredMutationPayload {
+  region: string
+  expensesPerMonth: string
+  goal: string
+  duration: string
+}
+
+interface IIncomeRequiredRawResponse {
+  income_required_before_tax: number
+}
+
+export const incomeRequiredMutationFn = async (payload: IIncomeRequiredMutationPayload) => {
+  const regionCode = regionToCodeMap[payload.region]
+
+  const response = await axios.post<IIncomeRequiredRawResponse>(`${baseUrl}/required`, {
+    region: regionCode,
+    average_expenses_per_month: formatCurrencyToInt(payload.expensesPerMonth),
+    savings_goal: formatCurrencyToInt(payload.goal),
+    savings_goal_rate: parseInt(payload.duration),
+  })
+
+  console.log("response!", { response: response.data })
+  return {
+    incomeRequiredBeforeTax: response.data.income_required_before_tax,
   }
 }

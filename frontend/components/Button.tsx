@@ -1,14 +1,19 @@
 import React from "react"
 import { Button as RButton, SxStyleProp, Text } from "rebass"
 import { Theme, themeColors } from "../styles/theme"
+import { Loading } from "./Loading"
 
 interface IButtonProps {
+  isDisabled: boolean
+  isLoading: boolean
   children: React.ReactNode
   theme?: Theme
   onClick: () => void
   sx?: SxStyleProp
 }
 export const Button: React.FC<IButtonProps> = ({
+  isDisabled,
+  isLoading,
   children,
   theme = Theme.PRIMARY,
   onClick,
@@ -16,8 +21,9 @@ export const Button: React.FC<IButtonProps> = ({
 }) => {
   return (
     <RButton
+      disabled={isDisabled}
       sx={{
-        width: ["120px", "200px"],
+        width: ["150px", "200px"],
         height: ["35px", "50px"],
         color: themeColors[theme].button.text,
         backgroundColor: themeColors[theme].button.bg,
@@ -32,9 +38,13 @@ export const Button: React.FC<IButtonProps> = ({
       }}
       onClick={onClick}
     >
-      <Text as="h3" sx={{ fontSize: [18, 25] }}>
-        {children}
-      </Text>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Text as="h3" sx={{ fontSize: [18, 25] }}>
+          {children}
+        </Text>
+      )}
     </RButton>
   )
 }

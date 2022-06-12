@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Theme } from "../styles/theme"
 import { TextInput } from "./TextInput"
 
-const options = [
+export const canadianRegions = [
   "Alberta",
   "British Columbia",
   "Manitoba",
@@ -18,7 +18,7 @@ const options = [
   "Yukon",
 ]
 
-interface IRegionTextInputProps {
+export interface IRegionTextInputProps {
   theme?: Theme
   input: string | null
   setInput: React.Dispatch<React.SetStateAction<string | null>>
@@ -33,7 +33,7 @@ export const RegionTextInput: React.FC<IRegionTextInputProps> = ({
 
   useEffect(() => {
     if (input && input.length >= 3) {
-      const results = options.filter((option) => option.includes(input))
+      const results = canadianRegions.filter((region) => region.includes(input))
       setSearchResult(results[0] || "")
     }
 
