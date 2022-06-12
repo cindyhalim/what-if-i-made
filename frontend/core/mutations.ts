@@ -62,6 +62,7 @@ interface IIncomeRequiredMutationPayload {
 
 interface IIncomeRequiredRawResponse {
   income_required_before_tax: number
+  tax_paid: number
 }
 
 export const incomeRequiredMutationFn = async (payload: IIncomeRequiredMutationPayload) => {
@@ -77,5 +78,6 @@ export const incomeRequiredMutationFn = async (payload: IIncomeRequiredMutationP
   console.log("response!", { response: response.data })
   return {
     incomeRequiredBeforeTax: response.data.income_required_before_tax,
+    taxPaid: response.data.tax_paid,
   }
 }

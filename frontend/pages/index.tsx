@@ -2,13 +2,14 @@ import type { NextPage } from "next"
 import Head from "next/head"
 import { ThemeProvider } from "@emotion/react"
 import { Theme, theme } from "../styles/theme"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 
 import { IncomeDeltaForm } from "../features/income-delta/IncomeDeltaForm"
 import { IncomeRequiredForm } from "../features/income-required/IncomeRequiredForm"
 import { motion, useAnimation } from "framer-motion"
 import { BaseLayout } from "../components/BaseLayout"
-import { Loading } from "../components/Loading"
+
+import { IncomeRequiredResult } from "../features/income-required/IncomeRequiredResult"
 
 type Form = "income-delta" | "income-required"
 
@@ -18,20 +19,20 @@ const Form = () => {
 
   const isIncomeDeltaForm = form === "income-delta"
 
-  useEffect(() => {
-    isIncomeDeltaForm
-      ? controls.start({
-          x: [0, 100, 0],
-          transition: { duration: 0.5 },
-        })
-      : controls.start({
-          x: [0, -100, 0],
-          transition: { duration: 0.5 },
-        })
-  }, [controls, isIncomeDeltaForm])
-
   const handleOnFormTransition = () => {
-    return isIncomeDeltaForm ? setForm("income-required") : setForm("income-delta")
+    if (isIncomeDeltaForm) {
+      setForm("income-required")
+      controls.start({
+        x: [0, -100, 0],
+        transition: { duration: 0.5 },
+      })
+    } else {
+      setForm("income-delta")
+      controls.start({
+        x: [0, 100, 0],
+        transition: { duration: 0.5 },
+      })
+    }
   }
 
   return (
@@ -48,6 +49,21 @@ const Form = () => {
     </BaseLayout>
   )
 }
+
+// const IncomeDeltaResult = () => {
+//   return (
+//     <Box
+//       as={"span"}
+//       sx={{
+//         cursor: "default",
+//         ...theme.heading,
+//       }}
+//     >
+//       that is a <TextHighlight theme={Theme.SECONDARY} text={" 50% increase"} />
+//     </Box>
+//   )
+// }
+
 const Home: NextPage = () => {
   return (
     <>
@@ -58,6 +74,11 @@ const Home: NextPage = () => {
       </Head>
       <ThemeProvider theme={theme}>
         <Form />
+        {/* <BaseLayout theme={Theme.SECONDARY}>
+          <IncomeDeltaResult />
+        </BaseLayout> */}
+
+        <IncomeRequiredResult />
       </ThemeProvider>
     </>
   )
