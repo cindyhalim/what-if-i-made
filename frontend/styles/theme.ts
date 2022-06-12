@@ -11,6 +11,7 @@ export const theme = {
   },
   heading: {
     fontSize: [22, 40, 50],
+    fontWeight: "bold",
   },
 }
 

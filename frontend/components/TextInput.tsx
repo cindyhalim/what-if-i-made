@@ -154,7 +154,6 @@ export const TextInput: React.FC<ITextInputProps> = ({
         sx={{
           ...baseTheme.heading,
           zIndex: 1000,
-          fontWeight: "bold",
           outline: 0,
           border: 0,
           padding: 0,
@@ -181,7 +180,6 @@ export const TextInput: React.FC<ITextInputProps> = ({
         ref={textRef}
         sx={{
           ...baseTheme.heading,
-          fontWeight: "bold",
           width: "auto",
           visibility: "hidden",
           position: "fixed",
@@ -197,7 +195,6 @@ export const TextInput: React.FC<ITextInputProps> = ({
           sx={{
             ...baseTheme.heading,
             padding: 0,
-            fontWeight: "bold",
             width: inputWidth,
             display: "inline-block",
             position: "absolute",
