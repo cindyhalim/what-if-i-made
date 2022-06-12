@@ -57,4 +57,4 @@ class IncomeRequiredView(APIView):
             region=data["region"], income_after_tax=income_required_after_tax
         )
 
-        return Response(dict(income_required_before_tax=income_required_before_tax))
+        return Response(dict(income_required_before_tax=income_required_before_tax, tax_paid=income_required_before_tax-income_required_after_tax))
