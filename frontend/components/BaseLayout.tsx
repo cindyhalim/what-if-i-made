@@ -21,7 +21,7 @@ export const BaseLayout: React.FC<{
       color: themeColors[theme].text,
       backgroundColor: themeColors[theme].bg,
       position: "relative",
-      paddingX: 20,
+      paddingX: [20, 60],
     }}
   >
     {children}
