@@ -1,6 +1,6 @@
 import { Input } from "@rebass/forms"
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
-import { Box, Text } from "rebass"
+import { Box } from "rebass"
 import { Theme, theme as baseTheme, themeColors } from "../styles/theme"
 import { motion } from "framer-motion"
 import { INPUT_PADDING, useHighlightAnimation } from "../hooks/useHighlightAnimation"
@@ -79,6 +79,7 @@ export const TextInput: React.FC<ITextInputProps> = ({
         if (formattedText.length === 1) {
           return formattedText.toUpperCase()
         }
+        return formattedText
       default:
         return inputText
     }

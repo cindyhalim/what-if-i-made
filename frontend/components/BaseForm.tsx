@@ -1,8 +1,9 @@
 import React from "react"
-import { Box, Flex, Text } from "rebass"
-import { Theme, themeColors } from "../styles/theme"
+import { Flex } from "rebass"
+import { Theme } from "../styles/theme"
 import { Button } from "./Button"
-import { motion } from "framer-motion"
+import { ErrorToast } from "./ErrorToast"
+
 interface IBaseFormProps {
   theme?: Theme
   children: React.ReactNode
@@ -13,11 +14,15 @@ interface IBaseFormProps {
 export const BaseForm: React.FC<IBaseFormProps> = ({ theme = Theme.PRIMARY, button, children }) => (
   <Flex
     sx={{
+      width: "100%",
+      position: "relative",
+      height: "100vh",
       flexDirection: "column",
       justifyContent: "center",
       maxWidth: "1500px",
     }}
   >
+    <ErrorToast message={"Something went wrong. Please try again."} />
     {children}
     <Button
       theme={theme}
