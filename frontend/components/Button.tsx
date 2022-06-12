@@ -1,13 +1,19 @@
 import React from "react"
-import { Button as RButton, Text } from "rebass"
+import { Button as RButton, SxStyleProp, Text } from "rebass"
 import { Theme, themeColors } from "../styles/theme"
 
 interface IButtonProps {
   children: React.ReactNode
   theme?: Theme
   onClick: () => void
+  sx?: SxStyleProp
 }
-export const Button: React.FC<IButtonProps> = ({ children, theme = Theme.PRIMARY, onClick }) => {
+export const Button: React.FC<IButtonProps> = ({
+  children,
+  theme = Theme.PRIMARY,
+  onClick,
+  sx,
+}) => {
   return (
     <RButton
       sx={{
@@ -22,6 +28,7 @@ export const Button: React.FC<IButtonProps> = ({ children, theme = Theme.PRIMARY
         "&:hover": {
           opacity: 0.9,
         },
+        ...sx,
       }}
       onClick={onClick}
     >

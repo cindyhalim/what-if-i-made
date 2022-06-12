@@ -1,39 +1,30 @@
 import React from "react"
-import { Flex } from "rebass"
+import { Box, Flex, Text } from "rebass"
 import { Theme, themeColors } from "../styles/theme"
 import { Button } from "./Button"
-
+import { motion } from "framer-motion"
 interface IBaseFormProps {
   theme?: Theme
   children: React.ReactNode
   button: {
-    children: string
     onSubmit: () => void
   }
 }
 export const BaseForm: React.FC<IBaseFormProps> = ({ theme = Theme.PRIMARY, button, children }) => (
   <Flex
     sx={{
-      alignItems: "center",
-      justifyContent: "center",
-      height: "100vh",
-      width: "100%",
-      color: themeColors[theme].text,
       flexDirection: "column",
-      backgroundColor: themeColors[theme].bg,
+      justifyContent: "center",
+      maxWidth: "1500px",
     }}
   >
-    <Flex
-      sx={{
-        flexDirection: "column",
-        width: "90%",
-        marginY: 80,
-      }}
+    {children}
+    <Button
+      theme={theme}
+      onClick={button.onSubmit}
+      sx={{ marginTop: [30, 50, 50], alignSelf: "center" }}
     >
-      {children}
-    </Flex>
-    <Button theme={theme} onClick={button.onSubmit}>
-      {button.children}
+      find out
     </Button>
   </Flex>
 )

@@ -5,7 +5,7 @@ import { Theme, theme as baseTheme, themeColors } from "../styles/theme"
 import { motion } from "framer-motion"
 import { INPUT_PADDING, useHighlightAnimation } from "../hooks/useHighlightAnimation"
 
-type InputType = "money" | "text"
+type InputType = "money" | "text" | "number"
 export interface ITextInputProps {
   name: string
   theme?: Theme
@@ -68,9 +68,11 @@ export const TextInput: React.FC<ITextInputProps> = ({
     switch (type) {
       case "money":
         // replace symbols (non digits, non words, and not space)
-        const formattedMoneyText = inputText.replace(/[^0-9\s]/g, "")
+        const formattedMoneyText = inputText.replace(/[^0-9]/g, "")
         const textWithThousandsSeparator = formattedMoneyText.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         return formattedMoneyText ? `$${textWithThousandsSeparator}` : ""
+      case "number":
+        return inputText.replace(/[^0-9]/g, "")
       case "text":
         // replace symbols (not words and not space)
         const formattedText = inputText.replace(/[^a-zA-Z\s]/g, "")
@@ -80,6 +82,14 @@ export const TextInput: React.FC<ITextInputProps> = ({
       default:
         return inputText
     }
+  }
+
+  const validate = (type: InputType, text: string) => {
+    if (type === "number") {
+      if (parseInt(text) > 100) return false
+    }
+
+    return true
   }
 
   const resetAutoSuggestion = () => {
@@ -107,7 +117,10 @@ export const TextInput: React.FC<ITextInputProps> = ({
       resetAutoSuggestion()
     }
     const formattedText = formatInputBasedOnType(type, event.target.value)
-    setValue(formattedText)
+    const isValid = validate(type, formattedText)
+    if (isValid) {
+      setValue(formattedText)
+    }
   }
 
   const handleOnInputContainerClick = () => {
@@ -151,6 +164,13 @@ export const TextInput: React.FC<ITextInputProps> = ({
             fontWeight: "bold",
             opacity: 0.5,
           },
+        }}
+        onKeyDown={(event) => {
+          console.log("hii event", event)
+          if (autoSuggestion && event.code === "Enter") {
+            setValue(autoSuggestion)
+            event.currentTarget.blur()
+          }
         }}
         onFocus={handleOnInputFocus}
         onBlur={handleOnInputBlur}

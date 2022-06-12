@@ -7,7 +7,7 @@ import { TextInput } from "../../components/TextInput"
 import { incomeDeltaQueryFn } from "../../core/mutations"
 import { theme } from "../../styles/theme"
 
-export const IncomeDeltaForm = () => {
+export const IncomeDeltaForm: React.FC = () => {
   const [currentIncome, setCurrentIncome] = useState<string | null>(null)
   const [desiredIncome, setDesiredIncome] = useState<string | null>(null)
   const [region, setRegion] = useState<string | null>(null)
@@ -65,7 +65,6 @@ export const IncomeDeltaForm = () => {
   return (
     <BaseForm
       button={{
-        children: "find out",
         onSubmit: handleOnSubmit,
       }}
     >

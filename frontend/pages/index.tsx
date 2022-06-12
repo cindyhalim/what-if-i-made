@@ -1,55 +1,65 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { ThemeProvider } from "@emotion/react";
-import { Box, Flex, Text } from "rebass";
-import { Button } from "../components/Button";
-import { theme } from "../styles/theme";
-import { Dropdown } from "../components/Dropdown";
-import { TextInput } from "../components/InputText";
+import type { NextPage } from "next"
+import Head from "next/head"
+import { ThemeProvider } from "@emotion/react"
+import { Theme, theme } from "../styles/theme"
+import React, { useEffect, useState } from "react"
 
+import { IncomeDeltaForm } from "../features/income-delta/IncomeDeltaForm"
+import { IncomeRequiredForm } from "../features/income-required/IncomeRequiredForm"
+import { motion, useAnimation } from "framer-motion"
+import { BaseLayout } from "../components/BaseLayout"
+
+type Form = "income-delta" | "income-required"
+
+const Form = () => {
+  const [form, setForm] = useState<Form>("income-delta")
+  const controls = useAnimation()
+
+  const isIncomeDeltaForm = form === "income-delta"
+
+  useEffect(() => {
+    isIncomeDeltaForm
+      ? controls.start({
+          x: [0, 100, 0],
+          transition: { duration: 0.5 },
+        })
+      : controls.start({
+          x: [0, -100, 0],
+          transition: { duration: 0.5 },
+        })
+  }, [controls, isIncomeDeltaForm])
+
+  const handleOnFormTransition = () => {
+    return isIncomeDeltaForm ? setForm("income-required") : setForm("income-delta")
+  }
+
+  return (
+    <BaseLayout
+      theme={isIncomeDeltaForm ? Theme.PRIMARY : Theme.SECONDARY}
+      switchForm={{
+        direction: isIncomeDeltaForm ? "right" : "left",
+        onClick: handleOnFormTransition,
+      }}
+    >
+      <motion.div animate={controls}>
+        {isIncomeDeltaForm ? <IncomeDeltaForm /> : <IncomeRequiredForm />}
+      </motion.div>
+    </BaseLayout>
+  )
+}
 const Home: NextPage = () => {
   return (
     <>
       <Head>
         <title>what if i made</title>
-        <meta
-          name="description"
-          content="tool to visualize your nominal income gains"
-        />
+        <meta name="description" content="tool to visualize your nominal income gains" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <ThemeProvider theme={theme}>
-        <Flex
-          sx={{
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100vh",
-            width: "100%",
-            color: theme.colors.white,
-            flexDirection: "column",
-            backgroundColor: theme.colors.green,
-          }}
-        >
-          <Flex sx={{ flexDirection: "column", marginY: 80 }}>
-            <Text as={"h2"} sx={{ ...theme.heading }}>
-              i live in
-            </Text>
-            <Box sx={{ display: "inline-block" }}>
-              <Text as={"h2"} sx={{ ...theme.heading }}>
-                i currently make <TextInput name={"current-income"} />.
-              </Text>
-            </Box>
-
-            <Text as={"h2"} sx={{ ...theme.heading }}>
-              what if i made ____ ?
-            </Text>
-          </Flex>
-          <Button onClick={() => null}>find out</Button>
-        </Flex>
+        <Form />
       </ThemeProvider>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
