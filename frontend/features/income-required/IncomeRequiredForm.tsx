@@ -1,18 +1,27 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useMutation } from "react-query"
 import { Flex, Text } from "rebass"
 import { BaseForm } from "../../components/BaseForm"
 import { canadianRegions, RegionTextInput } from "../../components/RegionTextInput"
 import { TextInput } from "../../components/TextInput"
 import { incomeRequiredMutationFn } from "../../core/mutations"
+import { actions } from "../../core/redux/incomeRequiredSlice"
+import { useAppDispatch, useAppSelector } from "../../core/redux/store"
 import { theme, Theme } from "../../styles/theme"
 
 export const IncomeRequiredForm: React.FC = () => {
-  const [region, setRegion] = useState<string | null>(null)
-  const [spending, setSpending] = useState<string | null>(null)
-  const [goal, setGoal] = useState<string | null>(null)
-  const [duration, setDuration] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [region, setRegion] = useState<string | null>(null)
+
+  const spending = useAppSelector((state) => state.incomeRequired.spending)
+  const goal = useAppSelector((state) => state.incomeRequired.goal)
+  const duration = useAppSelector((state) => state.incomeRequired.duration)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(actions.clearState())
+  }, [dispatch])
 
   const incomeRequiredPrompts = [
     <>
@@ -31,7 +40,7 @@ export const IncomeRequiredForm: React.FC = () => {
         placeholder={"$4,500"}
         type={"money"}
         value={spending}
-        setValue={setSpending}
+        setValue={(val) => dispatch(actions.setSpending(val))}
       />
       <Text as={"h2"} sx={{ ...theme.heading }}>
         per month
@@ -47,7 +56,7 @@ export const IncomeRequiredForm: React.FC = () => {
         placeholder={"$100,000"}
         type={"money"}
         value={goal}
-        setValue={setGoal}
+        setValue={(val) => dispatch(actions.setGoal(val))}
       />
       <Text as={"h2"} sx={{ ...theme.heading }}>
         in
@@ -58,7 +67,7 @@ export const IncomeRequiredForm: React.FC = () => {
         placeholder={"3"}
         type={"number"}
         value={duration}
-        setValue={setDuration}
+        setValue={(val) => dispatch(actions.setDuration(val))}
       />
       <Text as={"h2"} sx={{ ...theme.heading }}>
         years
@@ -68,6 +77,14 @@ export const IncomeRequiredForm: React.FC = () => {
 
   const { isLoading, mutate } = useMutation("mutateIncomeRequired", incomeRequiredMutationFn, {
     onError: () => setErrorMessage("Something went wrong. Please try again."),
+    onSuccess: (data) => {
+      dispatch(
+        actions.setResults({
+          incomeBeforeTax: data.incomeRequiredBeforeTax,
+          taxesPaid: data.taxPaid,
+        }),
+      )
+    },
   })
 
   const validate = () => {
@@ -93,6 +110,7 @@ export const IncomeRequiredForm: React.FC = () => {
     const isValid = validate()
 
     if (isValid) {
+      dispatch(actions.hideResults())
       mutate({
         region: region || "",
         expensesPerMonth: spending || "",

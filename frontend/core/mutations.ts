@@ -1,4 +1,5 @@
 import axios from "axios"
+import { formatCurrencyToInt } from "./money"
 
 const baseUrl = "http://127.0.0.1:8000/income"
 
@@ -28,11 +29,6 @@ interface IIncomeDeltaRawResponse {
   percentage_increase: number
   current_income_after_tax: number
   desired_income_after_tax: number
-}
-
-const formatCurrencyToInt = (currency: string) => {
-  const formattedCurrency = currency.replace(/[^0-9]/g, "")
-  return parseInt(formattedCurrency)
 }
 
 export const incomeDeltaMutationFn = async (payload: IIncomeDeltaMutationPayload) => {

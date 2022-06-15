@@ -11,7 +11,7 @@ export interface ITextInputProps {
   theme?: Theme
   placeholder?: string
   type?: InputType
-  setValue: React.Dispatch<React.SetStateAction<string | null>>
+  setValue: (val: string | null) => void
   value: string | null
   autoSuggestion?: string
   setAutoSuggestion?: React.Dispatch<React.SetStateAction<string | null>>

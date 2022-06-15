@@ -1,8 +1,8 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 import { ThemeProvider } from "@emotion/react"
-import { Theme, theme } from "../styles/theme"
-import React, { useState } from "react"
+import {  theme } from "../styles/theme"
+import React from "react"
 
 import { IncomeDeltaForm } from "../features/income-delta/IncomeDeltaForm"
 import { IncomeRequiredForm } from "../features/income-required/IncomeRequiredForm"
@@ -10,23 +10,35 @@ import { motion, useAnimation } from "framer-motion"
 import { BaseLayout } from "../components/BaseLayout"
 
 import { IncomeRequiredResult } from "../features/income-required/IncomeRequiredResult"
-
-type Form = "income-delta" | "income-required"
+import { IncomeDeltaResult } from "../features/income-delta/incomeDeltaResult"
+import { useAppDispatch, useAppSelector } from "../core/redux/store"
+import { actions, Form } from "../core/redux/app"
+import { actions as incomeDeltaActions } from "../core/redux/incomeDeltaSlice"
+import { actions as incomeRequiredActions } from "../core/redux/incomeRequiredSlice"
+import { useTheme } from "../hooks/useTheme"
 
 const Form = () => {
-  const [form, setForm] = useState<Form>("income-delta")
+  const form = useAppSelector((state) => state.app.form)
+  const dispatch = useAppDispatch()
+  const { form: formTheme } = useTheme()
+
+  const setForm = (formType: Form) => {
+    dispatch(actions.setForm(formType))
+  }
   const controls = useAnimation()
 
   const isIncomeDeltaForm = form === "income-delta"
 
   const handleOnFormTransition = () => {
     if (isIncomeDeltaForm) {
+      dispatch(incomeDeltaActions.hideResults())
       setForm("income-required")
       controls.start({
         x: [0, -100, 0],
         transition: { duration: 0.5 },
       })
     } else {
+      dispatch(incomeRequiredActions.hideResults())
       setForm("income-delta")
       controls.start({
         x: [0, 100, 0],
@@ -37,7 +49,7 @@ const Form = () => {
 
   return (
     <BaseLayout
-      theme={isIncomeDeltaForm ? Theme.PRIMARY : Theme.SECONDARY}
+      theme={formTheme}
       switchForm={{
         direction: isIncomeDeltaForm ? "right" : "left",
         onClick: handleOnFormTransition,
@@ -50,19 +62,22 @@ const Form = () => {
   )
 }
 
-// const IncomeDeltaResult = () => {
-//   return (
-//     <Box
-//       as={"span"}
-//       sx={{
-//         cursor: "default",
-//         ...theme.heading,
-//       }}
-//     >
-//       that is a <TextHighlight theme={Theme.SECONDARY} text={" 50% increase"} />
-//     </Box>
-//   )
-// }
+const Result = () => {
+  const incomeDeltaHasResults = useAppSelector((state) => state.incomeDelta.showResults)
+  const incomeRequiredHasResults = useAppSelector((state) => state.incomeRequired.showResults)
+  const { results: resultsTheme } = useTheme()
+
+  if (!incomeDeltaHasResults && !incomeRequiredHasResults) {
+    return null
+  }
+
+  return (
+    <BaseLayout theme={resultsTheme}>
+      {incomeDeltaHasResults && <IncomeDeltaResult />}
+      {incomeRequiredHasResults && <IncomeRequiredResult />}
+    </BaseLayout>
+  )
+}
 
 const Home: NextPage = () => {
   return (
@@ -74,11 +89,7 @@ const Home: NextPage = () => {
       </Head>
       <ThemeProvider theme={theme}>
         <Form />
-        {/* <BaseLayout theme={Theme.SECONDARY}>
-          <IncomeDeltaResult />
-        </BaseLayout> */}
-
-        <IncomeRequiredResult />
+        <Result />
       </ThemeProvider>
     </>
   )

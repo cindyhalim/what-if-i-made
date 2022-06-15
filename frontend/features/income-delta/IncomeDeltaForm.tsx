@@ -1,17 +1,26 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useMutation } from "react-query"
 import { Flex, Text } from "rebass"
 import { BaseForm } from "../../components/BaseForm"
 import { canadianRegions, RegionTextInput } from "../../components/RegionTextInput"
 import { TextInput } from "../../components/TextInput"
 import { incomeDeltaMutationFn } from "../../core/mutations"
+import { actions } from "../../core/redux/incomeDeltaSlice"
+import { useAppDispatch, useAppSelector } from "../../core/redux/store"
 import { theme } from "../../styles/theme"
 
 export const IncomeDeltaForm: React.FC = () => {
-  const [currentIncome, setCurrentIncome] = useState<string | null>(null)
-  const [desiredIncome, setDesiredIncome] = useState<string | null>(null)
-  const [region, setRegion] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [region, setRegion] = useState<string | null>(null)
+
+  const currentIncome = useAppSelector((state) => state.incomeDelta.currentIncome)
+  const desiredIncome = useAppSelector((state) => state.incomeDelta.desiredIncome)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(actions.clearState())
+  }, [dispatch])
+
   const incomeDeltaPrompts = [
     <>
       <Text as={"h2"} sx={{ ...theme.heading }}>
@@ -29,7 +38,7 @@ export const IncomeDeltaForm: React.FC = () => {
         placeholder={"$50,000"}
         type={"money"}
         value={currentIncome}
-        setValue={setCurrentIncome}
+        setValue={(val) => dispatch(actions.setCurrentIncome(val))}
       />
       <Text as={"h2"} sx={{ ...theme.heading }}>
         anually
@@ -44,7 +53,7 @@ export const IncomeDeltaForm: React.FC = () => {
         placeholder={"$100,000"}
         type={"money"}
         value={desiredIncome}
-        setValue={setDesiredIncome}
+        setValue={(val) => dispatch(actions.setDesiredIncome(val))}
       />
       <Text as={"h2"} sx={{ ...theme.heading }}>
         ?
@@ -54,6 +63,15 @@ export const IncomeDeltaForm: React.FC = () => {
 
   const { isLoading, mutate } = useMutation("mutateIncomeDelta", incomeDeltaMutationFn, {
     onError: () => setErrorMessage("Something went wrong. Please try again."),
+    onSuccess: (data) => {
+      dispatch(
+        actions.setResults({
+          percentageIncrease: data.percentageIncrease,
+          currentIncomeAfterTax: data.currentIncomeAfterTax,
+          desiredIncomeAfterTax: data.desiredIncomeAfterTax,
+        }),
+      )
+    },
   })
 
   const validate = () => {
@@ -74,6 +92,7 @@ export const IncomeDeltaForm: React.FC = () => {
     const isValid = validate()
 
     if (isValid) {
+      dispatch(actions.hideResults())
       mutate({
         region: region || "",
         currentIncome: currentIncome || "",
