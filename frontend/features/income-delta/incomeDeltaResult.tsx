@@ -24,7 +24,6 @@ export const IncomeDeltaResult = () => {
         alignItems: ["center", "center", "flex-start"],
         width: ["100%", "100%", "50%"],
       }}
-      order={[1, 1, 2]}
     >
       <Box
         as={"span"}

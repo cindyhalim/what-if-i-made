@@ -3,15 +3,21 @@ import React from "react"
 import { Flex, Text } from "rebass"
 import { Theme, themeColors } from "../styles/theme"
 
-export const BaseLayout: React.FC<{
+interface IBaseLayoutComponentProps {
   theme: Theme
   children: React.ReactNode
   switchForm?: {
     direction: "right" | "left"
     onClick: () => void
   }
-}> = ({ theme, children, switchForm }) => (
+}
+
+const BaseLayoutComponent: React.ForwardRefRenderFunction<RefType, IBaseLayoutComponentProps> = (
+  { theme, children, switchForm },
+  ref,
+) => (
   <Flex
+    ref={ref}
     sx={{
       flexDirection: "column",
       alignItems: "center",
@@ -73,3 +79,6 @@ export const BaseLayout: React.FC<{
     )}
   </Flex>
 )
+
+type RefType = HTMLDivElement | null
+export const BaseLayout = React.forwardRef<RefType, IBaseLayoutComponentProps>(BaseLayoutComponent)

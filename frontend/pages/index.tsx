@@ -1,8 +1,8 @@
 import type { NextPage } from "next"
 import Head from "next/head"
 import { ThemeProvider } from "@emotion/react"
-import {  theme } from "../styles/theme"
-import React from "react"
+import { theme } from "../styles/theme"
+import React, { useEffect, useRef } from "react"
 
 import { IncomeDeltaForm } from "../features/income-delta/IncomeDeltaForm"
 import { IncomeRequiredForm } from "../features/income-required/IncomeRequiredForm"
@@ -67,14 +67,28 @@ const Result = () => {
   const incomeRequiredHasResults = useAppSelector((state) => state.incomeRequired.showResults)
   const { results: resultsTheme } = useTheme()
 
+  const resultsRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (incomeDeltaHasResults || incomeRequiredHasResults) {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    }
+  }, [incomeDeltaHasResults, incomeRequiredHasResults])
+
   if (!incomeDeltaHasResults && !incomeRequiredHasResults) {
     return null
   }
 
   return (
-    <BaseLayout theme={resultsTheme}>
-      {incomeDeltaHasResults && <IncomeDeltaResult />}
-      {incomeRequiredHasResults && <IncomeRequiredResult />}
+    <BaseLayout theme={resultsTheme} ref={resultsRef}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1, transition: { duration: 1 } }}
+        viewport={{ once: false }}
+      >
+        {incomeDeltaHasResults && <IncomeDeltaResult />}
+        {incomeRequiredHasResults && <IncomeRequiredResult />}
+      </motion.div>
     </BaseLayout>
   )
 }
