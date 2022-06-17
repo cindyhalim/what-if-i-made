@@ -97,7 +97,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>what if i made</title>
+        <title>what if i made - income visualizer</title>
         <meta name="description" content="tool to visualize your nominal income gains" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
