@@ -1,11 +1,9 @@
 import React from "react"
-import { Chart } from "react-chartjs-2"
-import { Box, Flex, Text } from "rebass"
-import { Theme, theme } from "../../styles/theme"
+import { Box, Flex } from "rebass"
+import { theme } from "../../styles/theme"
 import { TextHighlight } from "../../components/TextHighlight"
-import { BaseLayout } from "../../components/BaseLayout"
 import { useAppSelector } from "../../core/redux/store"
-import { formatCurrencyToInt, formatIntToCurrency } from "../../core/money"
+import { formatIntToCurrency } from "../../core/money"
 import { useTheme } from "../../hooks/useTheme"
 
 export const IncomeDeltaResult = () => {
