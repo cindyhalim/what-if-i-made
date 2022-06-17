@@ -34,14 +34,14 @@ export const IncomeDeltaResult = () => {
           lineHeight: 1.5,
         }}
       >
-        your current nominal income after tax is{" "}
+        your <TextHighlight theme={resultsTheme} text={"current"} /> nominal income after tax is{" "}
         <TextHighlight
           theme={resultsTheme}
           text={`${formatIntToCurrency(currentIncomeAfterTax)}`}
         />
         .
         <br />
-        your desired nominal income after tax is{" "}
+        your <TextHighlight theme={resultsTheme} text={"desired"} /> nominal income after tax is{" "}
         <TextHighlight
           theme={resultsTheme}
           text={`${formatIntToCurrency(desiredIncomeAfterTax)}`}
