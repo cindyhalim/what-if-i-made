@@ -4,7 +4,11 @@ import { Box } from "rebass"
 import { INPUT_PADDING, useHighlightAnimation } from "../hooks/useHighlightAnimation"
 import { Theme, themeColors } from "../styles/theme"
 
-export const TextHighlight: React.FC<{ text: string; theme: Theme }> = ({ text, theme }) => {
+export const TextHighlight: React.FC<{ text: string; theme: Theme; customColor?: string }> = ({
+  text,
+  theme,
+  customColor,
+}) => {
   const [height, setHeight] = useState<number>(0)
 
   const highlightRef = useRef<HTMLSpanElement | null>(null)
@@ -36,12 +40,16 @@ export const TextHighlight: React.FC<{ text: string; theme: Theme }> = ({ text, 
   })
 
   return (
-    <Box as="span" ref={highlightRef} sx={{ position: "relative" }}>
+    <Box
+      as="span"
+      ref={highlightRef}
+      sx={{ position: "relative", color: customColor ?? themeColors[theme].text }}
+    >
       {text}
       <motion.span
         animate={controls}
         style={{
-          backgroundColor: themeColors[theme].text,
+          backgroundColor: customColor ?? themeColors[theme].text,
           borderRadius: 10,
           opacity: 0.3,
           position: "absolute",

@@ -9,20 +9,21 @@ import { formatCurrencyToInt, formatIntToCurrency } from "../../core/money"
 import { useTheme } from "../../hooks/useTheme"
 
 export const IncomeDeltaResult = () => {
-  const percentageIncrease = useAppSelector((state) => state.incomeDelta.percentageIncrease)
+  const percentageIncrease = useAppSelector((state) => state.incomeDelta.percentageIncrease) || 0
   const currentIncomeAfterTax =
     useAppSelector((state) => state.incomeDelta.currentIncomeAfterTax) || 0
   const desiredIncomeAfterTax =
     useAppSelector((state) => state.incomeDelta.desiredIncomeAfterTax) || 0
   const { results: resultsTheme } = useTheme()
 
+  const delta = percentageIncrease >= 0 ? "increase" : "decrease"
   return (
     <Flex
       flexDirection="column"
       sx={{
         justifyContent: "center",
         alignItems: ["center", "center", "flex-start"],
-        width: ["100%", "100%", "50%"],
+        width: "100%",
       }}
     >
       <Box
@@ -33,18 +34,29 @@ export const IncomeDeltaResult = () => {
           lineHeight: 1.5,
         }}
       >
-        that is a <TextHighlight theme={resultsTheme} text={`${percentageIncrease}% increase`} />!
         your current nominal income after tax is{" "}
         <TextHighlight
           theme={resultsTheme}
           text={`${formatIntToCurrency(currentIncomeAfterTax)}`}
-        />{" "}
-        and your nominal desired income after tax is{" "}
+        />
+        .
+        <br />
+        your desired nominal income after tax is{" "}
         <TextHighlight
           theme={resultsTheme}
           text={`${formatIntToCurrency(desiredIncomeAfterTax)}`}
         />
         .
+        <br />
+        that is a{" "}
+        <TextHighlight
+          theme={resultsTheme}
+          customColor={percentageIncrease < 0 ? theme.colors.error : undefined}
+          text={`${formatIntToCurrency(
+            Math.abs(desiredIncomeAfterTax - currentIncomeAfterTax),
+          )} (~${Math.abs(percentageIncrease)}%) ${delta}`}
+        />
+        !
       </Box>
     </Flex>
   )
