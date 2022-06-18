@@ -34,7 +34,7 @@ interface IIncomeDeltaRawResponse {
 export const incomeDeltaMutationFn = async (payload: IIncomeDeltaMutationPayload) => {
   const regionCode = regionToCodeMap[payload.region]
 
-  const response = await axios.post<IIncomeDeltaRawResponse>(`${baseUrl}/delta`, {
+  const response = await axios.post<IIncomeDeltaRawResponse>(`${baseUrl}/delta/`, {
     current_income: formatCurrencyToInt(payload.currentIncome),
     desired_income: formatCurrencyToInt(payload.desiredIncome),
     region: regionCode,
@@ -64,7 +64,7 @@ interface IIncomeRequiredRawResponse {
 export const incomeRequiredMutationFn = async (payload: IIncomeRequiredMutationPayload) => {
   const regionCode = regionToCodeMap[payload.region]
 
-  const response = await axios.post<IIncomeRequiredRawResponse>(`${baseUrl}/required`, {
+  const response = await axios.post<IIncomeRequiredRawResponse>(`${baseUrl}/required/`, {
     region: regionCode,
     average_expenses_per_month: formatCurrencyToInt(payload.expensesPerMonth),
     savings_goal: formatCurrencyToInt(payload.goal),
