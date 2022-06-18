@@ -1,7 +1,7 @@
 import axios from "axios"
 import { formatCurrencyToInt } from "./money"
 
-const baseUrl = "http://127.0.0.1:8000/income"
+const baseUrl = `${process.env.REACT_APP_SERVICE_URL}/income`
 
 const regionToCodeMap: { [key: string]: string } = {
   Alberta: "AB",
