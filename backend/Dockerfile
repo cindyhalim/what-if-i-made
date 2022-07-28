@@ -5,7 +5,7 @@ ARG FUNCTION_DIR="/var/task/"
 
 COPY ./ ${FUNCTION_DIR}
 
-RUN pip install Django djangorestframework django-cors-headers webdriver-manager zappa selenium
+RUN pip install -r requirements.txt
 
 RUN ZAPPA_HANDLER_PATH=$( \
     python -c "from zappa import handler; print (handler.__file__)" \
