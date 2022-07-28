@@ -3,7 +3,6 @@
 - built with Django, Selenium
 - deploy to AWS with [Zappa](https://github.com/zappa/Zappa) via Docker and ECR
 
-<br/>
 
 ### **initial deploy:**
 
@@ -34,7 +33,6 @@
   ```
 - don't forget to add the domain to `ALLOWED_HOSTS` in `api/settings.py`
 
-<br/>
 
 ### **making updates:**
 
@@ -50,7 +48,6 @@ might have to allow access first:
 chmod +x ./update.sh
 ```
 
-<br/>
 
 ### **resources:**
 
