@@ -7,7 +7,6 @@ from income.utils import (
     get_income_required_before_tax,
 )
 
-
 class IncomesDeltaView(APIView):
     serializer_class = IncomesDeltaSerializer
 
@@ -48,13 +47,14 @@ class IncomeRequiredView(APIView):
 
         data = serializer.data
 
-        income_required_after_tax = int(
+        income_required_after_tax = int(    
             (data["savings_goal"] / data["savings_goal_rate"])
             + (data["average_expenses_per_month"] * 12)
         )
 
         income_required_before_tax = get_income_required_before_tax(
-            region=data["region"], income_after_tax=income_required_after_tax
+            region=data["region"], 
+            income_after_tax=income_required_after_tax,
         )
 
         return Response(dict(income_required_before_tax=income_required_before_tax, tax_paid=income_required_before_tax-income_required_after_tax))
