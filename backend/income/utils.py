@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from enum import Enum
 from re import sub
 
-class Region(Enum):
+class CanadianRegion(Enum):
     AB = "Alberta"
     BC = "British Columbia"
     MB = "Manitoba"
@@ -20,16 +20,76 @@ class Region(Enum):
     SK = "Saskatchewan"
     YT = "Yukon"
 
-def get_net_pay_after_tax(region: str, salary: int) -> int:
-    full_region_name = Region[region].value
-    
+class USState(Enum):
+    AL = "Alabama"
+    AK = "Alaska"
+    AZ = "Arizona"
+    AR = "Arkansas"
+    CA = "California"
+    CO = "Colorado"
+    CT = "Connecticut"
+    DE = "Delaware"
+    DC = "Washington DC"
+    FL = "Florida"
+    GA = "Georgia"
+    HI = "Hawaii"
+    ID = "Idaho"
+    IL = "Illinois"
+    IN = "Indiana"
+    IA = "Iowa"
+    KS = "Kansas"
+    KY = "Kentucky"
+    LA = "Louisiana"
+    ME = "Maine"
+    MD = "Maryland"
+    MA = "Massachusetts"
+    MI = "Michigan"
+    MN = "Minnesota"
+    MS = "Mississippi"
+    MO = "Missouri"
+    MT = "Montana"
+    NE = "Nebraska"
+    NV = "Nevada"
+    NH = "New Hampshire"
+    NJ = "New Jersey"
+    NM = "New Mexico"
+    NY = "New York"
+    NC = "North Carolina"
+    ND = "North Dakota"
+    OH = "Ohio"
+    OK = "Oklahoma"
+    OR = "Oregon"
+    PA = "Pennsylvania"
+    RI = "Rhode Island"
+    SC = "South Carolina"
+    SD = "South Dakota"
+    TN = "Tennessee"
+    TX = "Texas"
+    UT = "Utah"
+    VT = "Vermont"
+    VA = "Virginia"
+    WA = "Washington"
+    WV = "West Virginia"
+    WI = "Wisconsin"
+    WY = "Wyoming"
+
+
+
+
+def get_net_pay_after_tax(country: str, region: str, salary: int) -> int:
+
+    full_region_name = CanadianRegion[region].value if country == "CA" else USState[region].value
+     
     url = (
-        "https://ca.talent.com/ajax/taxcal/taxberg/taxBerg.php?country=ca&language=en&region="
+        "https://ca.talent.com/ajax/taxcal/taxberg/taxBerg.php?country="
+        + country.lower()
+        +"&language=en&region="
         + full_region_name
         + "&salary="
         + str(salary)
         + "&from=year"
     )
+
 
     response = requests.get(url)
     html = BeautifulSoup(response.content, 'html.parser')
@@ -49,7 +109,7 @@ def get_percentage_increase(curr_income: int, new_income: int) -> int:
     percentage = ((new_income - curr_income) / curr_income) * 100
     return round(percentage)
 
-def get_income_required_before_tax(region: str, income_after_tax: int) -> int:
+def get_income_required_before_tax(country: str, region: str, income_after_tax: int) -> int:
     # return early if income after tax is 1 mill
     if income_after_tax > 1000000:
         return 1000000
@@ -59,7 +119,7 @@ def get_income_required_before_tax(region: str, income_after_tax: int) -> int:
 
     while left <= right:
         mid = (left + right) // 2
-        mid_income_after_tax = get_net_pay_after_tax(region, mid)
+        mid_income_after_tax = get_net_pay_after_tax(country, region, mid)
 
         if mid_income_after_tax == income_after_tax:
             return mid 

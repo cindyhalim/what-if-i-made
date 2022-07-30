@@ -15,15 +15,16 @@ class IncomesDeltaView(APIView):
         serializer.is_valid(raise_exception=True)
         data = serializer.data
 
+        country = data["country"]
         region = data["region"]
         current_income = data["current_income"]
         desired_income = data["desired_income"]
 
         current_income_after_tax = get_net_pay_after_tax(
-            region=region, salary=current_income
+            country=country, region=region, salary=current_income
         )
         desired_income_after_tax = get_net_pay_after_tax(
-            region=region, salary=desired_income
+            country=country, region=region, salary=desired_income
         )
         percentage_increase = get_percentage_increase(
             current_income_after_tax, desired_income_after_tax
@@ -53,6 +54,7 @@ class IncomeRequiredView(APIView):
         )
 
         income_required_before_tax = get_income_required_before_tax(
+            country=data["country"],
             region=data["region"], 
             income_after_tax=income_required_after_tax,
         )
