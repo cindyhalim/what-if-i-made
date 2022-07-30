@@ -43,7 +43,11 @@ export const TextHighlight: React.FC<{ text: string; theme: Theme; customColor?:
     <Box
       as="span"
       ref={highlightRef}
-      sx={{ position: "relative", color: customColor ?? themeColors[theme].text }}
+      sx={{
+        position: "relative",
+        color: customColor ?? themeColors[theme].text,
+        fontWeight: "bold",
+      }}
     >
       {text}
       <motion.span
