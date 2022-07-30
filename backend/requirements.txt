@@ -1,5 +1,5 @@
 Django==3.2.13
-selenium==4.2.0
 zappa==0.54.2
 djangorestframework==3.13.1
 django-cors-headers==3.13.0
+beautifulsoup4

@@ -6,6 +6,7 @@
     "project_name": "what-if-i-made",
     "runtime": "python3.9",
     "s3_bucket": "what-if-i-made",
-    "keep-warm": false
+    "keep_warm": false,
+    "cors": true
   }
 }
