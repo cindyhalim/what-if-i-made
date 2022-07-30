@@ -24,23 +24,21 @@ export const IncomeRequiredResult = () => {
 
   const barChartData: IBarChartData[] = [
     {
-      label: "expenses per month",
+      label: "expenses",
       value: spendingPerMonthInt,
       color: "#F06543",
     },
     {
-      label: "taxes paid per month",
+      label: "taxes paid",
       value: Math.round(taxesPaidPerMonth),
       color: "#F09D51",
     },
     {
-      label: "to save per month",
+      label: "to save",
       value: Math.round(incomeBeforeTaxPerMonth - (spendingPerMonthInt + taxesPaidPerMonth)),
       color: "#E0DFD5",
     },
   ]
-
-  console.log("hii data", barChartData)
 
   const barChartProps = {
     theme: resultsTheme,
@@ -94,11 +92,11 @@ export const IncomeRequiredResult = () => {
               to save <TextHighlight theme={resultsTheme} text={savings} /> in{" "}
               <TextHighlight theme={resultsTheme} text={duration} /> years.
             </Box>
-            <Text sx={{ fontSize: 14, fontWeight: "bold", opacity: 0.8, marginTop: 20 }}>
-              * annually, before tax. does not account for inflation.
-            </Text>
           </Flex>
           <BarChart {...barChartProps} />
+          <Text sx={{ fontSize: 14, fontWeight: "bold", opacity: 0.8, marginTop: 20 }}>
+            * annually, before tax. does not account for inflation.
+          </Text>
         </>
       )}
     </>
