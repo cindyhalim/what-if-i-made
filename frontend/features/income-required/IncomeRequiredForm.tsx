@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useMutation } from "react-query"
 import { Flex, Text } from "rebass"
 import { BaseForm } from "../../components/BaseForm"
-import { canadianRegions, RegionTextInput } from "../../components/RegionTextInput"
+import { americanStates, canadianRegions, RegionTextInput } from "../../components/RegionTextInput"
 import { TextInput } from "../../components/TextInput"
 import { incomeRequiredMutationFn } from "../../core/mutations"
 import { actions } from "../../core/redux/incomeRequiredSlice"
@@ -16,6 +16,7 @@ export const IncomeRequiredForm: React.FC = () => {
   const spending = useAppSelector((state) => state.incomeRequired.spending)
   const goal = useAppSelector((state) => state.incomeRequired.goal)
   const duration = useAppSelector((state) => state.incomeRequired.duration)
+  const country = useAppSelector((state) => state.app.country)
 
   const dispatch = useAppDispatch()
 
@@ -98,7 +99,10 @@ export const IncomeRequiredForm: React.FC = () => {
       return false
     }
 
-    if (region && !canadianRegions.includes(region)) {
+    if (
+      (region && country === "CA" && !canadianRegions.includes(region)) ||
+      (country === "US" && !americanStates.includes(region))
+    ) {
       setErrorMessage("Not a valid Canadian province/territory")
       return false
     }
@@ -112,6 +116,7 @@ export const IncomeRequiredForm: React.FC = () => {
     if (isValid) {
       dispatch(actions.hideResults())
       mutate({
+        country,
         region: region || "",
         expensesPerMonth: spending || "",
         goal: goal || "",
