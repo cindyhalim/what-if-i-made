@@ -40,8 +40,6 @@ export const incomeDeltaMutationFn = async (payload: IIncomeDeltaMutationPayload
     region: regionCode,
   })
 
-  console.log("response!", { response: response.data })
-
   return {
     percentageIncrease: response.data.percentage_increase,
     currentIncomeAfterTax: response.data.current_income_after_tax,
@@ -71,7 +69,6 @@ export const incomeRequiredMutationFn = async (payload: IIncomeRequiredMutationP
     savings_goal_rate: parseInt(payload.duration),
   })
 
-  console.log("response!", { response: response.data })
   return {
     incomeRequiredBeforeTax: response.data.income_required_before_tax,
     taxPaid: response.data.tax_paid,
