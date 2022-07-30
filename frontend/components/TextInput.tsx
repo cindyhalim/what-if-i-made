@@ -114,7 +114,7 @@ export const TextInput: React.FC<ITextInputProps> = ({
   }
 
   const handleOnInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!value) {
+    if (!event.target.value || !value) {
       resetAutoSuggestion()
     }
     const formattedText = formatInputBasedOnType(type, event.target.value)
@@ -157,7 +157,7 @@ export const TextInput: React.FC<ITextInputProps> = ({
           outline: 0,
           border: 0,
           padding: 0,
-          width: inputWidth,
+          width: inputWidth + 10,
           display: "inline-block",
           "::placeholder": {
             color: themeColors[theme].text,
