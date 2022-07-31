@@ -14,10 +14,7 @@ try it out **[here](https://what-if-i-made.netlify.app/)**
 
 ### features:
 
+- CA and US support ✨
 - 2 ways to visualize your income 💸
 
-![feature1](https://github.com/cindyhalim/what-if-i-made/blob/main/docs/feature1.png)
-
-![feature2](https://github.com/cindyhalim/what-if-i-made/blob/main/docs/feature2.png)
-
-- CA and US support ✨
+![feature1](https://github.com/cindyhalim/what-if-i-made/blob/main/docs/feature1.png)![feature2](https://github.com/cindyhalim/what-if-i-made/blob/main/docs/feature2.png)
