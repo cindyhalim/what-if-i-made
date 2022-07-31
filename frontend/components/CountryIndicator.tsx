@@ -19,7 +19,7 @@ export const CountryIndicator: React.FC<ICountryIndicatorProps> = ({ text, theme
 
   const dispatch = useDispatch()
 
-  const DIMENSION = 30
+  const DIMENSION = 25
   return (
     <motion.div
       whileHover={{
@@ -47,7 +47,7 @@ export const CountryIndicator: React.FC<ICountryIndicatorProps> = ({ text, theme
     >
       <Box
         sx={{
-          fontSize: 14,
+          fontSize: 10,
           color: themeColors[theme].bg,
           fontWeight: "bold",
         }}
