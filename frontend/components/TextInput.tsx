@@ -55,7 +55,7 @@ export const TextInput: React.FC<ITextInputProps> = ({
     resetHighlight()
     const width = textRef?.current?.getBoundingClientRect()?.width || 0
     setInputWidth(width)
-  }, [country, resetHighlight])
+  }, [country])
 
   useLayoutEffect(() => {
     const width = textRef?.current?.getBoundingClientRect()?.width || 0
