@@ -4,6 +4,7 @@ import { Box } from "rebass"
 import { Theme, theme as baseTheme, themeColors } from "../styles/theme"
 import { motion } from "framer-motion"
 import { INPUT_PADDING, useHighlightAnimation } from "../hooks/useHighlightAnimation"
+import { useAppSelector } from "../core/redux/store"
 
 type InputType = "money" | "text" | "number"
 export interface ITextInputProps {
@@ -27,6 +28,7 @@ export const TextInput: React.FC<ITextInputProps> = ({
   autoSuggestion,
   setAutoSuggestion,
 }) => {
+  const country = useAppSelector((state) => state.app.country)
   const [inputHeight, setInputHeight] = useState<number>(0)
   const [inputWidth, setInputWidth] = useState<number>(0)
 
@@ -44,14 +46,21 @@ export const TextInput: React.FC<ITextInputProps> = ({
   useEffect(() => {
     if (value) {
       const width = textRef?.current?.getBoundingClientRect()?.width || 0
+
       animateHighlight(width)
     }
   }, [animateHighlight])
 
+  useEffect(() => {
+    resetHighlight()
+    const width = textRef?.current?.getBoundingClientRect()?.width || 0
+    setInputWidth(width)
+  }, [country, resetHighlight])
+
   useLayoutEffect(() => {
     const width = textRef?.current?.getBoundingClientRect()?.width || 0
     setInputWidth(width)
-  }, [value])
+  }, [value, placeholder])
 
   const onWindowResize = useCallback(async () => {
     const width = textRef?.current?.getBoundingClientRect()?.width || 0
