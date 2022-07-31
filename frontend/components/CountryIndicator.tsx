@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import React from "react"
 import { useDispatch } from "react-redux"
 import { Box } from "rebass"
-import { actions, type Country } from "../core/redux/app"
+import { actions, Country } from "../core/redux/app"
 import { actions as incomeDeltaActions } from "../core/redux/incomeDeltaSlice"
 import { actions as incomeRequiredActions } from "../core/redux/incomeRequiredSlice"
 import { useAppSelector } from "../core/redux/store"
@@ -39,6 +39,7 @@ export const CountryIndicator: React.FC<ICountryIndicatorProps> = ({ text, theme
       }}
       onClick={() => {
         dispatch(actions.setCountry(text))
+        dispatch(actions.resetRegion())
         // reset forms
         dispatch(incomeDeltaActions.clearState())
         dispatch(incomeRequiredActions.clearState())

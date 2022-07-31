@@ -76,7 +76,7 @@ export const americanStates = [
 export interface IRegionTextInputProps {
   theme?: Theme
   input: string | null
-  setInput: React.Dispatch<React.SetStateAction<string | null>>
+  setInput: (value: string | null) => void
 }
 
 export const RegionTextInput: React.FC<IRegionTextInputProps> = ({
@@ -96,7 +96,7 @@ export const RegionTextInput: React.FC<IRegionTextInputProps> = ({
       setSearchResult(results[0] || "")
     }
 
-    if (input && input.length < 4) {
+    if (!input || (input && input.length < 4)) {
       setSearchResult("")
     }
   }, [input, region_list])

@@ -1,6 +1,6 @@
 import React from "react"
 import { useAppDispatch, useAppSelector } from "../core/redux/store"
-import { actions, Form as FormType } from "../core/redux/app"
+import { actions, Country, Form as FormType } from "../core/redux/app"
 import { actions as incomeDeltaActions } from "../core/redux/incomeDeltaSlice"
 import { actions as incomeRequiredActions } from "../core/redux/incomeRequiredSlice"
 
@@ -9,6 +9,8 @@ import { motion, useAnimation } from "framer-motion"
 import { BaseLayout } from "../components/BaseLayout"
 import { IncomeDeltaForm } from "../features/income-delta/IncomeDeltaForm"
 import { IncomeRequiredForm } from "../features/income-required/IncomeRequiredForm"
+import { CountryIndicator } from "../components/CountryIndicator"
+import { Flex } from "rebass"
 
 export const Form = () => {
   const form = useAppSelector((state) => state.app.form)
@@ -48,6 +50,17 @@ export const Form = () => {
         onClick: handleOnFormTransition,
       }}
     >
+      <Flex
+        sx={{
+          position: "absolute",
+          top: 20,
+          right: 20,
+        }}
+      >
+        {[Country.CA, Country.US].map((country, idx) => (
+          <CountryIndicator key={idx} text={country} theme={formTheme} />
+        ))}
+      </Flex>
       <motion.div animate={controls}>
         {isIncomeDeltaForm ? <IncomeDeltaForm /> : <IncomeRequiredForm />}
       </motion.div>

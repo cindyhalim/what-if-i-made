@@ -1,9 +1,7 @@
 import { motion } from "framer-motion"
 import React from "react"
 import { Flex, Text } from "rebass"
-import { Country } from "../core/redux/app"
 import { Theme, themeColors } from "../styles/theme"
-import { CountryIndicator } from "./CountryIndicator"
 
 interface IBaseLayoutComponentProps {
   theme: Theme
@@ -32,18 +30,6 @@ const BaseLayoutComponent: React.ForwardRefRenderFunction<RefType, IBaseLayoutCo
       paddingX: [20, 60],
     }}
   >
-    <Flex
-      sx={{
-        position: "absolute",
-        top: 20,
-        right: 80,
-      }}
-    >
-      {/* TODO: clean this up */}
-      {["CA" as Country, "US" as Country].map((country, idx) => (
-        <CountryIndicator key={idx} text={country} theme={theme} />
-      ))}
-    </Flex>
     {children}
     {switchForm && (
       <motion.div
