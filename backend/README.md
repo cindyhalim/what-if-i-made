@@ -1,8 +1,7 @@
 # what if i made - backend
 
-- built with Django, Selenium
+- built with Django Rest Framework, Beautiful Soup
 - deploy to AWS with [Zappa](https://github.com/zappa/Zappa) via Docker and ECR
-
 
 ### **initial deploy:**
 
@@ -33,7 +32,6 @@
   ```
 - don't forget to add the domain to `ALLOWED_HOSTS` in `api/settings.py`
 
-
 ### **making updates:**
 
 when making changes to your application code, run the following script with your ECR repo URI:
@@ -47,7 +45,6 @@ might have to allow access first:
 ```
 chmod +x ./update.sh
 ```
-
 
 ### **resources:**
 

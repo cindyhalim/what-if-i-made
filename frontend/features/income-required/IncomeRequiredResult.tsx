@@ -6,7 +6,6 @@ import { useAppSelector } from "../../core/redux/store"
 import { formatCurrencyToInt, formatIntToCurrency } from "../../core/money"
 import { useTheme } from "../../hooks/useTheme"
 import { BarChart, IBarChartData } from "../../components/BarChart"
-import { BaseForm } from "../../components/BaseForm"
 
 export const IncomeRequiredResult = () => {
   const incomeBeforeTax = useAppSelector((state) => state.incomeRequired.incomeBeforeTax) || 0
