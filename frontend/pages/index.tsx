@@ -4,8 +4,8 @@ import { ThemeProvider } from "@emotion/react"
 import { theme } from "../styles/theme"
 import React from "react"
 
-import { Form } from "./form"
-import { Result } from "./result"
+import Form from "./form"
+import Result from "./result"
 
 const Home: NextPage = () => {
   return (

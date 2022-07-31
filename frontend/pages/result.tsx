@@ -6,7 +6,7 @@ import { IncomeDeltaResult } from "../features/income-delta/incomeDeltaResult"
 import { IncomeRequiredResult } from "../features/income-required/IncomeRequiredResult"
 import { useTheme } from "../hooks/useTheme"
 
-export const Result = () => {
+const Result = () => {
   const incomeDeltaHasResults = useAppSelector((state) => state.incomeDelta.showResults)
   const incomeRequiredHasResults = useAppSelector((state) => state.incomeRequired.showResults)
   const { results: resultsTheme } = useTheme()
@@ -36,3 +36,5 @@ export const Result = () => {
     </BaseLayout>
   )
 }
+
+export default Result

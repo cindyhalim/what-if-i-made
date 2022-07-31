@@ -12,7 +12,7 @@ import { IncomeRequiredForm } from "../features/income-required/IncomeRequiredFo
 import { CountryIndicator } from "../components/CountryIndicator"
 import { Flex } from "rebass"
 
-export const Form = () => {
+const Form = () => {
   const form = useAppSelector((state) => state.app.form)
   const dispatch = useAppDispatch()
   const { form: formTheme } = useTheme()
@@ -67,3 +67,5 @@ export const Form = () => {
     </BaseLayout>
   )
 }
+
+export default Form
