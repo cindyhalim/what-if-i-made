@@ -1,5 +1,5 @@
 import { Input } from "@rebass/forms"
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Box } from "rebass"
 import { Theme, theme as baseTheme, themeColors } from "../styles/theme"
 import { motion } from "framer-motion"
@@ -39,6 +39,14 @@ export const TextInput: React.FC<ITextInputProps> = ({
     const inputHeight = textRef?.current?.getBoundingClientRect()?.height || 0
     setInputHeight(inputHeight)
   }, [])
+
+  // only want to trigger this on first render, hence why we don't add value in dep array
+  useEffect(() => {
+    if (value) {
+      const width = textRef?.current?.getBoundingClientRect()?.width || 0
+      animateHighlight(width)
+    }
+  }, [animateHighlight])
 
   useLayoutEffect(() => {
     const width = textRef?.current?.getBoundingClientRect()?.width || 0

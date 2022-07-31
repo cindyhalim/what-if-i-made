@@ -6,13 +6,13 @@ import { americanStates, canadianRegions, RegionTextInput } from "../../componen
 import { TextInput } from "../../components/TextInput"
 import { incomeDeltaMutationFn } from "../../core/mutations"
 import { actions } from "../../core/redux/incomeDeltaSlice"
+import { actions as appActions } from "../../core/redux/app"
 import { useAppDispatch, useAppSelector } from "../../core/redux/store"
 import { theme } from "../../styles/theme"
 
 export const IncomeDeltaForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [region, setRegion] = useState<string | null>(null)
-
+  const region = useAppSelector((state) => state.app.region)
   const currentIncome = useAppSelector((state) => state.incomeDelta.currentIncome)
   const desiredIncome = useAppSelector((state) => state.incomeDelta.desiredIncome)
   const country = useAppSelector((state) => state.app.country)
@@ -20,15 +20,22 @@ export const IncomeDeltaForm: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(actions.clearState())
+    // clears the state when unmounted
+    return () => {
+      dispatch(actions.clearState())
+      return
+    }
   }, [dispatch])
+  const handleSetRegion = (value: string | null) => {
+    dispatch(appActions.setRegion(value))
+  }
 
   const incomeDeltaPrompts = [
     <>
       <Text as={"h2"} sx={{ ...theme.heading }}>
         i live in
       </Text>
-      <RegionTextInput input={region} setInput={setRegion} />
+      <RegionTextInput input={region} setInput={handleSetRegion} />
     </>,
 
     <>
