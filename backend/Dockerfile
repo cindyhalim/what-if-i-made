@@ -1,5 +1,4 @@
-FROM lambci/lambda:build-python3.8
-FROM umihico/aws-lambda-selenium-python:latest
+FROM amazon/aws-lambda-python:3.8
 
 ARG FUNCTION_DIR="/var/task/"
 

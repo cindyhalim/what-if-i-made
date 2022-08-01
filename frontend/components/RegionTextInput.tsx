@@ -87,19 +87,19 @@ export const RegionTextInput: React.FC<IRegionTextInputProps> = ({
   const country = useAppSelector((state) => state.app.country)
   const [searchResult, setSearchResult] = useState<string | null>(null)
   const isCanada = country == "CA"
-  const region_list = isCanada ? canadianRegions : americanStates
+  const regionList = isCanada ? canadianRegions : americanStates
   const placeholder = isCanada ? "province/territory" : "state"
 
   useEffect(() => {
     if (input && input.length >= 3) {
-      const results = region_list.filter((region) => region.includes(input))
+      const results = regionList.filter((region) => region.includes(input))
       setSearchResult(results[0] || "")
     }
 
     if (!input || (input && input.length < 4)) {
       setSearchResult("")
     }
-  }, [input, region_list])
+  }, [input, regionList])
 
   return (
     <TextInput
