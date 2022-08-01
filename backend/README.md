@@ -1,6 +1,6 @@
 # what if i made - backend
 
-- built with Django Rest Framework, Beautiful Soup
+- built with Django Rest Framework and Beautiful Soup
 - deploy to AWS with [Zappa](https://github.com/zappa/Zappa) via Docker and ECR
 
 ### **initial deploy:**
@@ -49,4 +49,3 @@ chmod +x ./update.sh
 ### **resources:**
 
 - [Serverless Docker on AWS Lambda with Zappa](https://ianwhitestone.work/zappa-serverless-docker/)
-- [docker-selenium-lambda](https://github.com/umihico/docker-selenium-lambda)
