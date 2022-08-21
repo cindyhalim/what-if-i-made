@@ -25,7 +25,6 @@ export const IncomeRequiredForm: React.FC = () => {
     // clears the state when unmounted
     return () => {
       dispatch(actions.clearState())
-      return
     }
   }, [dispatch])
 

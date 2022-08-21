@@ -20,6 +20,14 @@ export const CountryIndicator: React.FC<ICountryIndicatorProps> = ({ text, theme
   const dispatch = useDispatch()
 
   const DIMENSION = 30
+
+  const handleOnClick = () => {
+    dispatch(actions.setCountry(text))
+    dispatch(actions.resetRegion())
+    // reset forms
+    dispatch(incomeDeltaActions.clearState())
+    dispatch(incomeRequiredActions.clearState())
+  }
   return (
     <motion.div
       whileHover={{
@@ -37,13 +45,7 @@ export const CountryIndicator: React.FC<ICountryIndicatorProps> = ({ text, theme
         cursor: "pointer",
         marginRight: "5px",
       }}
-      onClick={() => {
-        dispatch(actions.setCountry(text))
-        dispatch(actions.resetRegion())
-        // reset forms
-        dispatch(incomeDeltaActions.clearState())
-        dispatch(incomeRequiredActions.clearState())
-      }}
+      onClick={handleOnClick}
     >
       <Box
         sx={{

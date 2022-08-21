@@ -23,9 +23,9 @@ export const IncomeDeltaForm: React.FC = () => {
     // clears the state when unmounted
     return () => {
       dispatch(actions.clearState())
-      return
     }
   }, [dispatch])
+
   const handleSetRegion = (value: string | null) => {
     dispatch(appActions.setRegion(value))
   }
