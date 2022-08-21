@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useAppSelector } from "../core/redux/store"
 import { Theme } from "../styles/theme"
 import { TextInput } from "./TextInput"
@@ -85,21 +85,12 @@ export const RegionTextInput: React.FC<IRegionTextInputProps> = ({
   theme = Theme.PRIMARY,
 }) => {
   const country = useAppSelector((state) => state.app.country)
-  const [searchResult, setSearchResult] = useState<string | null>(null)
   const isCanada = country == "CA"
   const regionList = isCanada ? canadianRegions : americanStates
   const placeholder = isCanada ? "province/territory" : "state"
 
-  useEffect(() => {
-    if (input && input.length >= 3) {
-      const results = regionList.filter((region) => region.includes(input))
-      setSearchResult(results[0] || "")
-    }
-
-    if (!input || (input && input.length < 4)) {
-      setSearchResult("")
-    }
-  }, [input, regionList])
+  const results = input ? regionList.filter((region) => region.includes(input)) : []
+  const searchResult = input && input.length >= 3 ? results[0] : ""
 
   return (
     <TextInput
@@ -107,8 +98,7 @@ export const RegionTextInput: React.FC<IRegionTextInputProps> = ({
       name="region"
       placeholder={placeholder}
       value={input}
-      autoSuggestion={searchResult || ""}
-      setAutoSuggestion={setSearchResult}
+      autoSuggestion={searchResult}
       setValue={setInput}
     />
   )
