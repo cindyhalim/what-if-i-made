@@ -15,7 +15,6 @@ export interface ITextInputProps {
   setValue: (val: string | null) => void
   value: string | null
   autoSuggestion?: string
-  setAutoSuggestion?: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 export const TextInput: React.FC<ITextInputProps> = ({
@@ -26,10 +25,7 @@ export const TextInput: React.FC<ITextInputProps> = ({
   setValue,
   value,
   autoSuggestion,
-  setAutoSuggestion,
 }) => {
-  const country = useAppSelector((state) => state.app.country)
-  const [inputHeight, setInputHeight] = useState<number>(0)
   const [inputWidth, setInputWidth] = useState<number>(0)
 
   const textRef = useRef<HTMLDivElement | null>(null)
@@ -37,37 +33,38 @@ export const TextInput: React.FC<ITextInputProps> = ({
 
   const { controls, animateHighlight, resetHighlight } = useHighlightAnimation()
 
-  useLayoutEffect(() => {
-    const inputHeight = textRef?.current?.getBoundingClientRect()?.height || 0
-    setInputHeight(inputHeight)
-  }, [])
+  const inputHeight = inputRef?.current?.getBoundingClientRect()?.height || 0
+  const height = `${inputHeight + INPUT_PADDING * 2}px`
+
+  const getWidth = () => {
+    return textRef?.current?.getBoundingClientRect()?.width || 0
+  }
 
   // only want to trigger this on first render, hence why we don't add value in dep array
   useEffect(() => {
     if (value) {
-      const width = textRef?.current?.getBoundingClientRect()?.width || 0
+      const width = getWidth()
 
       animateHighlight(width)
     }
   }, [animateHighlight])
 
+  // reset highlgiht if value is reset
   useEffect(() => {
-    resetHighlight()
-    const width = textRef?.current?.getBoundingClientRect()?.width || 0
-    setInputWidth(width)
-  }, [country])
+    if (!value) {
+      resetHighlight()
+    }
+  }, [value])
 
   useLayoutEffect(() => {
-    const width = textRef?.current?.getBoundingClientRect()?.width || 0
+    const width = getWidth()
     setInputWidth(width)
   }, [value, placeholder])
 
   const onWindowResize = useCallback(async () => {
-    const width = textRef?.current?.getBoundingClientRect()?.width || 0
-    const height = inputRef?.current?.getBoundingClientRect()?.height || 0
+    const width = getWidth()
 
     setInputWidth(width)
-    setInputHeight(height)
 
     if (value) {
       resetHighlight()
@@ -110,12 +107,7 @@ export const TextInput: React.FC<ITextInputProps> = ({
     return true
   }
 
-  const resetAutoSuggestion = () => {
-    setAutoSuggestion && setAutoSuggestion("")
-  }
-
   const handleOnInputFocus = () => {
-    resetAutoSuggestion()
     resetHighlight()
   }
 
@@ -131,9 +123,6 @@ export const TextInput: React.FC<ITextInputProps> = ({
   }
 
   const handleOnInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.value || !value) {
-      resetAutoSuggestion()
-    }
     const formattedText = formatInputBasedOnType(type, event.target.value)
     const isValid = validate(type, formattedText)
     if (isValid) {
@@ -192,6 +181,36 @@ export const TextInput: React.FC<ITextInputProps> = ({
         onBlur={handleOnInputBlur}
         onChange={handleOnInputChange}
       />
+      {autoSuggestion && (
+        <Input
+          value={autoSuggestion}
+          readOnly
+          sx={{
+            ...baseTheme.heading,
+            padding: 0,
+            width: inputWidth,
+            display: "inline-block",
+            position: "absolute",
+            outline: 0,
+            border: 0,
+            opacity: 0.5,
+            top: 0,
+            left: 0,
+          }}
+        />
+      )}
+      <motion.div
+        animate={controls}
+        style={{
+          backgroundColor: themeColors[theme].text,
+          borderRadius: 10,
+          opacity: 0.3,
+          position: "absolute",
+          top: `-${INPUT_PADDING}px`,
+          left: `-${INPUT_PADDING}px`,
+          height,
+        }}
+      />
       {/* hidden div to measure text input width and height*/}
       <Box
         ref={textRef}
@@ -206,36 +225,6 @@ export const TextInput: React.FC<ITextInputProps> = ({
       >
         {autoSuggestion || value || placeholder}
       </Box>
-      {autoSuggestion && (
-        <Input
-          value={autoSuggestion}
-          sx={{
-            ...baseTheme.heading,
-            padding: 0,
-            width: inputWidth,
-            display: "inline-block",
-            position: "absolute",
-            outline: 0,
-            border: 0,
-            opacity: 0.5,
-            top: 0,
-            left: 0,
-          }}
-          onChange={() => null}
-        />
-      )}
-      <motion.div
-        animate={controls}
-        style={{
-          backgroundColor: themeColors[theme].text,
-          borderRadius: 10,
-          opacity: 0.3,
-          position: "absolute",
-          top: `-${INPUT_PADDING}px`,
-          left: `-${INPUT_PADDING}px`,
-          height: `${inputHeight + INPUT_PADDING * 2}px`,
-        }}
-      />
     </Box>
   )
 }
