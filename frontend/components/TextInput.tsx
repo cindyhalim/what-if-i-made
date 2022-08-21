@@ -49,7 +49,6 @@ export const TextInput: React.FC<ITextInputProps> = ({
     }
   }, [animateHighlight])
 
-  // reset highlgiht if value is reset
   useEffect(() => {
     if (!value) {
       resetHighlight()
@@ -111,13 +110,13 @@ export const TextInput: React.FC<ITextInputProps> = ({
     resetHighlight()
   }
 
-  const handleOnInputBlur = () => {
+  const handleOnInputBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (autoSuggestion) {
       setValue(autoSuggestion)
     }
 
-    if (value) {
-      const width = textRef?.current?.getBoundingClientRect()?.width || 0
+    if (event.target.value) {
+      const width = getWidth()
       animateHighlight(width)
     }
   }
