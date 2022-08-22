@@ -15,17 +15,21 @@ export const TextHighlight: React.FC<{ text: string; theme: Theme; customColor?:
 
   const { controls, animateHighlight, resetHighlight } = useHighlightAnimation()
 
-  useEffect(() => {
+  const getDimensions = () => {
     const width = highlightRef?.current?.getBoundingClientRect().width || 0
     const height = highlightRef?.current?.getBoundingClientRect().height || 0
-    setHeight(height)
 
-    animateHighlight(width)
+    return { width, height }
+  }
+
+  useEffect(() => {
+    const { height, width } = getDimensions()
+    setHeight(height)
+    animateHighlight(width, 1)
   }, [animateHighlight])
 
   const onWindowResize = useCallback(async () => {
-    const width = highlightRef?.current?.getBoundingClientRect()?.width || 0
-    const height = highlightRef?.current?.getBoundingClientRect()?.height || 0
+    const { width, height } = getDimensions()
 
     setHeight(height)
 
@@ -50,7 +54,7 @@ export const TextHighlight: React.FC<{ text: string; theme: Theme; customColor?:
       }}
     >
       {text}
-      <motion.span
+      <motion.div
         animate={controls}
         style={{
           backgroundColor: customColor ?? themeColors[theme].text,

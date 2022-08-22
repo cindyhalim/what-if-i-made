@@ -15,6 +15,13 @@ export const IncomeDeltaResult = () => {
   const { results: resultsTheme } = useTheme()
 
   const delta = percentageIncrease >= 0 ? "increase" : "decrease"
+
+  const spanStyles = {
+    cursor: "default",
+    ...theme.heading,
+    lineHeight: 1.5,
+    marginBottom: 20,
+  }
   return (
     <Flex
       flexDirection="column"
@@ -24,37 +31,32 @@ export const IncomeDeltaResult = () => {
         width: "100%",
       }}
     >
-      <Box
-        as={"span"}
-        sx={{
-          cursor: "default",
-          ...theme.heading,
-          lineHeight: 1.5,
-        }}
-      >
+      <Box as={"span"} sx={spanStyles}>
         your <TextHighlight theme={resultsTheme} text={"current"} /> income after tax is{" "}
         <TextHighlight
           theme={resultsTheme}
           text={`${formatIntToCurrency(currentIncomeAfterTax)}`}
         />
         .
-        <br />
+      </Box>
+      <Box as={"span"} sx={spanStyles}>
         your <TextHighlight theme={resultsTheme} text={"desired"} /> income after tax is{" "}
         <TextHighlight
           theme={resultsTheme}
           text={`${formatIntToCurrency(desiredIncomeAfterTax)}`}
         />
         .
-        <br />
+      </Box>
+      <Box as={"span"} sx={spanStyles}>
         that is a{" "}
         <TextHighlight
           theme={resultsTheme}
           customColor={percentageIncrease < 0 ? theme.colors.error : undefined}
           text={`${formatIntToCurrency(
             Math.abs(desiredIncomeAfterTax - currentIncomeAfterTax),
-          )} (~${Math.abs(percentageIncrease)}%) ${delta}`}
-        />
-        !
+          )} (~${Math.abs(percentageIncrease)}%)`}
+        />{" "}
+        {delta}!
       </Box>
     </Flex>
   )

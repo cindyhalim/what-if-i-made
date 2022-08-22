@@ -7,10 +7,10 @@ export const useHighlightAnimation = () => {
   const controls = useAnimation()
 
   const animateHighlight = useCallback(
-    (width: number) => {
+    (width: number, delay?: number) => {
       controls.start({
         width: `${width + INPUT_PADDING * 2}px`,
-        transition: { duration: 0.5 },
+        transition: { duration: 0.5, delay: delay ?? 0 },
       })
     },
     [controls],
